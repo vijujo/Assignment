@@ -2,10 +2,12 @@
 
 The assignment involves the creation of a TODO and Reminder REST JSON API using Django. Please use the following libraries and versions:
 
-* Python 2.7 (we are currently migrating to 3, but a lot of the code is still 2.7)
-* Django 1.10+ 
-* Django Rest Framework 3.5+
-* Celery 4+
+* Python 3.5+
+* Django 2.0+
+* Django Rest Framework 3.8+
+* Celery 4.1+
+
+**Updated @ Nov'18**
 
 ## Simple TODO API (1-3h)
 
@@ -23,7 +25,7 @@ Via a REST API it must be possible to:
 *   Change a TODOs title or status
 *   Delete a TODO
 
-User Management and Authentication is not required.
+User management and authentication is are required.
 
 ### Constraints
 
