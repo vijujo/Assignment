@@ -1,7 +1,7 @@
+import self as self
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 from TodoApp.models import Board, Todo
 from TodoApp.serializers import BoardSerializer, TodoSerializer
 from rest_framework import generics
@@ -9,6 +9,9 @@ from rest_framework import generics
 
 @api_view(['GET', 'POST'])
 def board_list(request):
+    """
+    List all code boards, or create a new board.
+    """
     if request.method == 'GET':
         boards = Board.objects.all()
         serializer = BoardSerializer(boards, many=True)
@@ -24,6 +27,9 @@ def board_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def board_detail(request, pk):
+    """
+        Retrieve, update or delete a code board.
+        """
     try:
         board = Board.objects.get(pk=pk)
     except Board.DoesNotExist:
@@ -45,11 +51,6 @@ def board_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardSerializer
-
-
 @api_view(['GET', 'POST'])
 def todos_of_board(request, pk):
     if request.method == 'GET':
@@ -68,7 +69,7 @@ def todos_of_board(request, pk):
 @api_view(['GET', 'PUT', 'DELETE'])
 def todo_detail(request, pk):
     try:
-        todo = Todo.objects.get(pk=pk)
+        todo = Todo.objects.get(id=pk)
     except Todo.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
