@@ -2,9 +2,10 @@ from rest_framework import serializers
 from TodoApp.models import Board, Todo
 
 
-class BoardSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(required=False, allow_blank=True, max_length=200)
+class BoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Board
+        fields = ['id', 'name']
 
     def create(self, validated_data):
         return Board.objects.create(**validated_data)
