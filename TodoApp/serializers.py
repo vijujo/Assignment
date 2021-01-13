@@ -4,10 +4,11 @@ from TodoApp.models import Board, Todo
 
 class BoardSerializer(serializers.ModelSerializer):
     todos = serializers.StringRelatedField(many=True, required=False)
+    todo_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Board
-        fields = ['id', 'name', 'todos']
+        fields = ['id', 'name', 'todo_count', 'todos']
 
     def create(self, validated_data):
         return Board.objects.create(**validated_data)
@@ -16,6 +17,9 @@ class BoardSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.save()
         return instance
+
+    def get_todo_count(self, obj):
+        return obj.todos.count()
 
 
 class TodoSerializer(serializers.ModelSerializer):
