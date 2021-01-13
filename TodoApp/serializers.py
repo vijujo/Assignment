@@ -18,7 +18,8 @@ class BoardSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    def get_todo_count(self, obj):
+    @staticmethod
+    def get_todo_count(obj):
         return obj.todos.count()
 
 

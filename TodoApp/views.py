@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from TodoApp.models import Board, Todo
 from TodoApp.serializers import BoardSerializer, TodoSerializer, TodoUpdateSerializer
+from rest_framework import generics
 
 
 @api_view(['GET', 'POST'])
@@ -73,7 +74,7 @@ def todos_uncompleted(request):
         return Response(serializer.data)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def todo_detail(request, pk):
     try:
         todo = Todo.objects.get(id=pk)
@@ -86,6 +87,13 @@ def todo_detail(request, pk):
 
     elif request.method == 'PUT':
         serializer = TodoUpdateSerializer(todo, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'PATCH':
+        serializer = TodoUpdateSerializer(todo, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
