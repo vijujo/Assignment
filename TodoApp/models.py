@@ -8,8 +8,8 @@ class Board(models.Model):
 class Todo(models.Model):
     title = models.CharField(max_length=200)
     done = models.BooleanField(default=False)
-    created = models.DateTimeField('date created')
-    updated = models.DateTimeField('date updated')
+    created = models.DateTimeField()
+    updated = models.DateTimeField()
     board = models.ForeignKey(Board, related_name='todos',on_delete=models.CASCADE)
 
     def __str__(self):
