@@ -13,4 +13,4 @@ class Todo(models.Model):
     board = models.ForeignKey(Board, related_name='todos',on_delete=models.CASCADE)
 
     def __str__(self):
-        return '%s, %s, %s, %s' % (self.title, self.done, self.created, self.updated)
+        return 'id:%d  title:%s, done:%s, created on:%s, updated on: %s' % (self.id, self.title, self.done, self.created, self.updated)
