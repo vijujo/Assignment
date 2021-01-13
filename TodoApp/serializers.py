@@ -3,7 +3,7 @@ from TodoApp.models import Board, Todo
 
 
 class BoardSerializer(serializers.ModelSerializer):
-    todos = serializers.StringRelatedField(many=True)
+    todos = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = Board
