@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'TodoApp.apps.TodoappConfig',
+    'ReminderApp.apps.ReminderConfig',
     'rest_framework',
 ]
 
