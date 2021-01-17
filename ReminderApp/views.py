@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ReminderApp.models import Reminder
 from ReminderApp.serializers import ReminderSerializer
+from .tasks import post_reminder
 
 
 @api_view(['GET', 'POST'])
@@ -19,7 +20,9 @@ def reminder_list(request):
     elif request.method == 'POST':
         serializer = ReminderSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            reminder = serializer.save()
+            post_reminder.apply_async(kwargs={'text': reminder.text, 'callback_url': reminder.callback_url},
+                                      countdown=reminder.delay * 60)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
