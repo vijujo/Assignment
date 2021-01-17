@@ -2,13 +2,24 @@ from rest_framework import serializers
 from TodoApp.models import Board, Todo
 
 
-class BoardSerializer(serializers.ModelSerializer):
-    todos = serializers.StringRelatedField(many=True, required=False)
+class ListOfBoardsSerializer(serializers.ModelSerializer):
     todo_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Board
-        fields = ['id', 'name', 'todo_count', 'todos']
+        fields = ['id', 'name', 'todo_count']
+
+    @staticmethod
+    def get_todo_count(obj):
+        return obj.todos.count()
+
+
+class BoardSerializer(serializers.ModelSerializer):
+    todos = serializers.StringRelatedField(many=True, required=False)
+
+    class Meta:
+        model = Board
+        fields = ['id', 'name', 'todos']
 
     def create(self, validated_data):
         return Board.objects.create(**validated_data)
@@ -17,10 +28,6 @@ class BoardSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.save()
         return instance
-
-    @staticmethod
-    def get_todo_count(obj):
-        return obj.todos.count()
 
 
 class TodoSerializer(serializers.ModelSerializer):
@@ -48,5 +55,6 @@ class TodoUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
         instance.done = validated_data.get('done', instance.done)
+        # instance.updated = serializers.HiddenField(default=timezone.now())
         instance.save()
         return instance

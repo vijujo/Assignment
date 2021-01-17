@@ -3,18 +3,14 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from TodoApp.models import Board, Todo
-from TodoApp.serializers import BoardSerializer, TodoSerializer, TodoUpdateSerializer
-from rest_framework import generics
+from TodoApp.serializers import BoardSerializer, ListOfBoardsSerializer, TodoSerializer, TodoUpdateSerializer
 
 
 @api_view(['GET', 'POST'])
 def board_list(request):
-    """
-    List all code boards, or create a new board.
-    """
     if request.method == 'GET':
         boards = Board.objects.all()
-        serializer = BoardSerializer(boards, many=True)
+        serializer = ListOfBoardsSerializer(boards, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
@@ -27,9 +23,6 @@ def board_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def board_detail(request, pk):
-    """
-        Retrieve, update or delete a code board.
-        """
     try:
         board = Board.objects.get(pk=pk)
     except Board.DoesNotExist:
