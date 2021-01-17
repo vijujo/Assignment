@@ -1,11 +1,15 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ReminderApp.models import Reminder
 from ReminderApp.serializers import ReminderSerializer
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def reminder_list(request):
     if request.method == 'GET':
         reminders = Reminder.objects.all()
@@ -21,6 +25,8 @@ def reminder_list(request):
 
 
 @api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def reminder_detail(request, pk):
     try:
         reminder = Reminder.objects.get(id=pk)

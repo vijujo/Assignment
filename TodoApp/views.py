@@ -1,12 +1,18 @@
 import self as self
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from TodoApp.models import Board, Todo
 from TodoApp.serializers import BoardSerializer, ListOfBoardsSerializer, TodoSerializer, TodoUpdateSerializer
+from rest_framework import generics
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def board_list(request):
     if request.method == 'GET':
         boards = Board.objects.all()
@@ -22,6 +28,8 @@ def board_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def board_detail(request, pk):
     try:
         board = Board.objects.get(pk=pk)
@@ -45,6 +53,8 @@ def board_detail(request, pk):
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def todos_of_board(request, pk):
     if request.method == 'GET':
         todos = Todo.objects.filter(board=pk)
@@ -60,6 +70,8 @@ def todos_of_board(request, pk):
 
 
 @api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def todos_uncompleted(request):
     if request.method == 'GET':
         todos = Todo.objects.filter(done=False)
@@ -68,6 +80,8 @@ def todos_uncompleted(request):
 
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def todo_detail(request, pk):
     try:
         todo = Todo.objects.get(id=pk)
