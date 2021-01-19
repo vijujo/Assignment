@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ReminderApp.models import Reminder
 from ReminderApp.serializers import ReminderSerializer
-from .tasks import post_reminder
+from Assignment.tasks import post_reminder
 
 
 @api_view(['GET', 'POST'])
